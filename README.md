@@ -30,6 +30,19 @@ Run the API separately:
 uvicorn autods_gpt.api:app --host 0.0.0.0 --port 8000
 ```
 
+## Vercel Prototype
+
+The repository includes a Vercel-compatible static prototype in `public/index.html`.
+This lightweight demo is designed for quick stakeholder presentation on Vercel, while
+the full AutoDS-GPT Streamlit and FastAPI application remains available for local,
+Docker, and cloud-native execution.
+
+Deploy with:
+
+```powershell
+vercel --prod
+```
+
 ## Environment Variables
 
 ```text

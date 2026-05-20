@@ -1,0 +1,428 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>AutoDS-GPT Prototype</title>
+    <style>
+      :root {
+        color-scheme: light;
+        --ink: #18212f;
+        --muted: #5c6676;
+        --line: #d9e0ea;
+        --panel: #ffffff;
+        --soft: #f4f7fb;
+        --accent: #006f7d;
+        --accent-2: #b23b52;
+        --ok: #247a4d;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        color: var(--ink);
+        background: #eef3f8;
+      }
+
+      header {
+        border-bottom: 1px solid var(--line);
+        background: rgba(255, 255, 255, 0.92);
+        position: sticky;
+        top: 0;
+        z-index: 2;
+        backdrop-filter: blur(12px);
+      }
+
+      nav {
+        max-width: 1180px;
+        margin: 0 auto;
+        padding: 14px 20px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 20px;
+      }
+
+      .brand {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        font-weight: 800;
+        letter-spacing: 0;
+      }
+
+      .mark {
+        width: 34px;
+        height: 34px;
+        border-radius: 7px;
+        display: grid;
+        place-items: center;
+        color: white;
+        background: linear-gradient(135deg, var(--accent), #27384d);
+        font-size: 14px;
+      }
+
+      .nav-links {
+        display: flex;
+        gap: 16px;
+        color: var(--muted);
+        font-size: 14px;
+      }
+
+      main {
+        max-width: 1180px;
+        margin: 0 auto;
+        padding: 34px 20px 48px;
+      }
+
+      .hero {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) minmax(330px, 440px);
+        gap: 24px;
+        align-items: stretch;
+      }
+
+      .hero-copy {
+        padding: 28px 0;
+      }
+
+      h1 {
+        margin: 0;
+        font-size: clamp(42px, 6vw, 76px);
+        line-height: 0.94;
+        letter-spacing: 0;
+      }
+
+      .lead {
+        margin: 20px 0 0;
+        color: var(--muted);
+        max-width: 690px;
+        font-size: 18px;
+        line-height: 1.55;
+      }
+
+      .actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+        margin-top: 26px;
+      }
+
+      .button {
+        border: 1px solid var(--accent);
+        background: var(--accent);
+        color: white;
+        border-radius: 7px;
+        padding: 11px 16px;
+        font-weight: 700;
+        text-decoration: none;
+      }
+
+      .button.secondary {
+        background: white;
+        color: var(--accent);
+      }
+
+      .panel {
+        background: var(--panel);
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        box-shadow: 0 12px 35px rgba(28, 42, 59, 0.08);
+      }
+
+      .analysis-panel {
+        padding: 18px;
+      }
+
+      .panel-title {
+        display: flex;
+        justify-content: space-between;
+        gap: 12px;
+        align-items: center;
+        margin-bottom: 14px;
+      }
+
+      .status {
+        color: var(--ok);
+        font-size: 13px;
+        font-weight: 700;
+      }
+
+      .upload {
+        border: 1px dashed #9aa8b7;
+        border-radius: 8px;
+        padding: 16px;
+        background: var(--soft);
+      }
+
+      label {
+        display: block;
+        font-size: 13px;
+        font-weight: 700;
+        color: #344052;
+        margin-bottom: 7px;
+      }
+
+      input,
+      textarea,
+      select {
+        width: 100%;
+        border: 1px solid var(--line);
+        border-radius: 7px;
+        padding: 10px 11px;
+        font: inherit;
+        background: white;
+        color: var(--ink);
+      }
+
+      textarea {
+        min-height: 86px;
+        resize: vertical;
+      }
+
+      .form-grid {
+        display: grid;
+        gap: 13px;
+        margin-top: 14px;
+      }
+
+      .run {
+        margin-top: 14px;
+        width: 100%;
+        cursor: pointer;
+      }
+
+      .metrics {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 12px;
+        margin-top: 14px;
+      }
+
+      .metric {
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        padding: 12px;
+        background: #fbfcfe;
+      }
+
+      .metric b {
+        display: block;
+        font-size: 21px;
+      }
+
+      .metric span {
+        color: var(--muted);
+        font-size: 12px;
+      }
+
+      section {
+        margin-top: 28px;
+      }
+
+      .grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 16px;
+      }
+
+      .card {
+        padding: 18px;
+      }
+
+      h2,
+      h3 {
+        margin: 0 0 10px;
+        letter-spacing: 0;
+      }
+
+      p {
+        color: var(--muted);
+        line-height: 1.55;
+      }
+
+      .workflow {
+        display: grid;
+        grid-template-columns: repeat(5, 1fr);
+        gap: 10px;
+      }
+
+      .step {
+        background: white;
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        padding: 14px;
+        min-height: 112px;
+      }
+
+      .step strong {
+        display: block;
+        margin-bottom: 7px;
+      }
+
+      .insight {
+        border-left: 4px solid var(--accent-2);
+        padding: 14px 16px;
+        background: white;
+      }
+
+      footer {
+        border-top: 1px solid var(--line);
+        color: var(--muted);
+        padding: 24px 20px;
+        text-align: center;
+        font-size: 14px;
+      }
+
+      @media (max-width: 900px) {
+        .hero,
+        .grid,
+        .workflow,
+        .metrics {
+          grid-template-columns: 1fr;
+        }
+
+        .nav-links {
+          display: none;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <nav>
+        <div class="brand"><div class="mark">AI</div> AutoDS-GPT</div>
+        <div class="nav-links">
+          <span>AutoML</span>
+          <span>LLM Reasoning</span>
+          <span>Explainable AI</span>
+          <span>Industrial Analytics</span>
+        </div>
+      </nav>
+    </header>
+
+    <main>
+      <div class="hero">
+        <div class="hero-copy">
+          <h1>AutoDS-GPT</h1>
+          <p class="lead">
+            An enterprise AI data science assistant that understands datasets, detects ML problem types,
+            recommends models, generates workflows, explains results, and supports conversational analytics
+            for industrial and business applications.
+          </p>
+          <div class="actions">
+            <a class="button" href="#prototype">Open Prototype</a>
+            <a class="button secondary" href="https://github.com/07Akhil/auto_ds" rel="noreferrer">View GitHub</a>
+          </div>
+        </div>
+
+        <div id="prototype" class="panel analysis-panel">
+          <div class="panel-title">
+            <h2>AI Analysis Console</h2>
+            <span class="status">Prototype Ready</span>
+          </div>
+          <div class="upload">
+            <label for="dataset">Dataset Upload</label>
+            <input id="dataset" type="file" accept=".csv,.xlsx,.xls,.json" />
+          </div>
+          <div class="form-grid">
+            <div>
+              <label for="intent">Business Intent</label>
+              <textarea id="intent">Predict machine failure using sensor data and explain the key root causes.</textarea>
+            </div>
+            <div>
+              <label for="mode">User Mode</label>
+              <select id="mode">
+                <option>Beginner Mode</option>
+                <option>Expert Mode</option>
+              </select>
+            </div>
+          </div>
+          <button class="button run" id="run">Run AI Analysis</button>
+          <div class="metrics">
+            <div class="metric"><b id="rows">12k</b><span>Rows profiled</span></div>
+            <div class="metric"><b id="problem">Classification</b><span>Detected problem</span></div>
+            <div class="metric"><b id="model">Random Forest</b><span>Recommended model</span></div>
+          </div>
+        </div>
+      </div>
+
+      <section class="grid">
+        <article class="panel card">
+          <h3>Dataset Intelligence</h3>
+          <p>
+            Detects numerical, categorical, text, datetime, missing values, outliers, correlations,
+            imbalanced classes, target variables, and high-dimensional risks.
+          </p>
+        </article>
+        <article class="panel card">
+          <h3>Adaptive AutoML</h3>
+          <p>
+            Generates preprocessing, feature engineering, training, validation, hyperparameter, ranking,
+            and deployment workflows from dataset metadata and business intent.
+          </p>
+        </article>
+        <article class="panel card">
+          <h3>Explainable AI</h3>
+          <p>
+            Combines feature importance, SHAP/LIME-ready explanations, performance interpretation,
+            confidence reasoning, and root-cause analysis for business users.
+          </p>
+        </article>
+      </section>
+
+      <section>
+        <h2>Generated Industrial Workflow</h2>
+        <div class="workflow">
+          <div class="step"><strong>1. Ingest</strong><p>CSV, Excel, JSON, SQL, and IoT stream inputs.</p></div>
+          <div class="step"><strong>2. Understand</strong><p>LLM-assisted dataset and intent interpretation.</p></div>
+          <div class="step"><strong>3. Train</strong><p>Regression, classification, clustering, anomaly, and forecasting pipelines.</p></div>
+          <div class="step"><strong>4. Explain</strong><p>Feature drivers, errors, metrics, and business impact.</p></div>
+          <div class="step"><strong>5. Deploy</strong><p>REST APIs, Docker support, reports, and monitoring hooks.</p></div>
+        </div>
+      </section>
+
+      <section class="panel insight">
+        <h2>Prototype Note</h2>
+        <p>
+          Due to project time constraints, this prototype uses a Grok API key for LLM-powered reasoning
+          instead of training a custom foundation model from scratch. The full repository keeps the
+          Streamlit dashboard and FastAPI backend for local or cloud-native execution.
+        </p>
+      </section>
+    </main>
+
+    <footer>
+      AutoDS-GPT prototype for enterprise AutoML, AI copilots, and Industry 4.0 analytics.
+    </footer>
+
+    <script>
+      const runButton = document.querySelector("#run");
+      const problem = document.querySelector("#problem");
+      const model = document.querySelector("#model");
+      const rows = document.querySelector("#rows");
+
+      runButton.addEventListener("click", () => {
+        const intent = document.querySelector("#intent").value.toLowerCase();
+        rows.textContent = document.querySelector("#dataset").files.length ? "Uploaded" : "Demo";
+        if (intent.includes("forecast") || intent.includes("energy")) {
+          problem.textContent = "Forecasting";
+          model.textContent = "LightGBM";
+        } else if (intent.includes("anomaly") || intent.includes("fraud")) {
+          problem.textContent = "Anomaly";
+          model.textContent = "Isolation Forest";
+        } else if (intent.includes("failure") || intent.includes("class")) {
+          problem.textContent = "Classification";
+          model.textContent = "Random Forest";
+        } else {
+          problem.textContent = "Regression";
+          model.textContent = "XGBoost";
+        }
+      });
+    </script>
+  </body>
+</html>
