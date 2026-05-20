@@ -1,0 +1,19 @@
+services:
+  autods-gpt-dashboard:
+    build: .
+    ports:
+      - "8501:8501"
+    environment:
+      AUTODS_GPT_API_KEY: ${AUTODS_GPT_API_KEY:-}
+      AUTODS_GPT_BASE_URL: ${AUTODS_GPT_BASE_URL:-https://api.hpc-ai.com/inference/v1}
+      AUTODS_GPT_MODEL: ${AUTODS_GPT_MODEL:-openai/gpt-5.5}
+
+  autods-gpt-api:
+    build: .
+    command: uvicorn autods_gpt.api:app --host 0.0.0.0 --port 8000
+    ports:
+      - "8000:8000"
+    environment:
+      AUTODS_GPT_API_KEY: ${AUTODS_GPT_API_KEY:-}
+      AUTODS_GPT_BASE_URL: ${AUTODS_GPT_BASE_URL:-https://api.hpc-ai.com/inference/v1}
+      AUTODS_GPT_MODEL: ${AUTODS_GPT_MODEL:-openai/gpt-5.5}
